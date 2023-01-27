@@ -18,7 +18,7 @@ def openfile():
 
     for f in filepaths:
         newImage = PIL.Image.open(f)
-        newImage = newImage.resize((80, 104))
+        newImage = newImage.resize((120, 150))
         displayImages.append(newImage)
         images.append(PIL.Image.open(f))
 
@@ -36,7 +36,7 @@ def placeImages():
 
 
     
-    imageWidth = 80
+    imageWidth = 120
     totalWidth = imageWidth * len(displayImages)
     xStart = (window.winfo_width() - totalWidth) /2
 
@@ -85,7 +85,7 @@ def saveFile():
     infolabel.config(text = "File Saved.")
 
 window = Tk()
-window.geometry("500x300")
+window.geometry("700x500")
 label = Label(text = "Welcome to Image to PDF Generator")
 label.place(relx = 0.5, rely=0.1, anchor = CENTER)
 label.pack()
