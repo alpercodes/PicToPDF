@@ -12,7 +12,7 @@ def openfile():
     infolabel.config(text = "opening files...")
     images.clear()
     displayImages.clear()
-    filepaths = filedialog.askopenfilenames()
+    filepaths = filedialog.askopenfilenames(filetypes=[("Image Files", "*.jpg *.png *.jpeg")])
     print(filepaths)
 
 
@@ -102,5 +102,3 @@ infolabel.place(relx = 0.5, rely= 0.9, anchor = CENTER)
 
 
 window.mainloop()
-
-# TODO: Make it so user can drag images to change order of them in the pdf
