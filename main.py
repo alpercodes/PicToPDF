@@ -1,4 +1,4 @@
-import PIL.Image  # install by > python3 -m pip install --upgrade Pillow  # ref. https://pillow.readthedocs.io/en/latest/installation.html#basic-installation
+import PIL.Image 
 from PIL import ImageTk
 from tkinter import *
 from tkinter import filedialog
@@ -8,7 +8,7 @@ displayImageButtons = []
 images = []
 displayImages =[]
 
-def openfile():
+def openfile(): #function when pressing "open" button ... loads chosen images
     infolabel.config(text = "opening files...")
     images.clear()
     displayImages.clear()
@@ -64,19 +64,19 @@ def placeImages():
 
     infolabel.config(text = "Waiting...")
 
-def move_image_left(image_index):
+def move_image_left(image_index): #function when pressing "left-button" under an image.. moves it to the left
     if image_index > 0:
         displayImages[image_index - 1], displayImages[image_index] = displayImages[image_index], displayImages[image_index-1]
         images[image_index - 1], images[image_index] = images[image_index], images[image_index-1]
     placeImages()
 
-def move_image_right(image_index):
+def move_image_right(image_index): #function when pressing "right-button" under an image.. moves it to the right
     if image_index < len(displayImages) -1:
         displayImages[image_index + 1], displayImages[image_index] = displayImages[image_index], displayImages[image_index+1]
         images[image_index + 1], images[image_index] = images[image_index], images[image_index+1]
     placeImages()
 
-def saveFile():
+def saveFile(): #Save Images in order as PDF
     infolabel.config(text = "saving...")
     images[0].save(
         filedialog.asksaveasfilename(defaultextension=".pdf"), "PDF" ,resolution=100.0, save_all=True, append_images=images[1:]
