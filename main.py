@@ -1,7 +1,7 @@
 import PIL.Image 
 from PIL import ImageTk
-from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, Button, Label, Checkbutton, Tk, CENTER, IntVar
+import ocrmypdf
 
 displayImageLabels = []
 displayImageButtons = []
@@ -12,17 +12,18 @@ def openfile(): #function when pressing "open" button ... loads chosen images
     infolabel.config(text = "opening files...")
     images.clear()
     displayImages.clear()
-    filepaths = filedialog.askopenfilenames(filetypes=[("Image Files", "*.jpg *.png *.jpeg")])
-    print(filepaths)
+    try:
+        filepaths = filedialog.askopenfilenames(filetypes=[("Image Files", "*.jpg *.png *.jpeg")])
 
+        for f in filepaths:
+            newImage = PIL.Image.open(f)
+            newImage = newImage.resize((120, 150))
+            displayImages.append(newImage)
+            images.append(PIL.Image.open(f))
 
-    for f in filepaths:
-        newImage = PIL.Image.open(f)
-        newImage = newImage.resize((120, 150))
-        displayImages.append(newImage)
-        images.append(PIL.Image.open(f))
-
-    placeImages()
+        placeImages()
+    except:
+        infolabel.config(text = "ERROR while uploading files.")
     
     
 def placeImages():
@@ -77,14 +78,21 @@ def move_image_right(image_index): #function when pressing "right-button" under 
     placeImages()
 
 def saveFile(): #Save Images in order as PDF
-    infolabel.config(text = "saving...")
-    images[0].save(
-        filedialog.asksaveasfilename(defaultextension=".pdf"), "PDF" ,resolution=100.0, save_all=True, append_images=images[1:]
-    )
-    print("file saved.")
-    infolabel.config(text = "File Saved.")
+    if len(images) == 0:
+        infolabel.config(text = "No Images selected...")
+    else:
+        infolabel.config(text = "saving...")
+        target_path = filedialog.asksaveasfilename(defaultextension=".pdf")
+        images[0].save(target_path, "PDF" ,resolution=100.0, save_all=True, append_images=images[1:])
+        print("file saved.")
+        print(ocr_checked.get())
+        if ocr_checked.get() == 1:
+            print("trying ocr....")
+            ocrmypdf.ocr(target_path, target_path, deskew=True)
+        infolabel.config(text = "File Saved.")
 
 window = Tk()
+ocr_checked = IntVar()
 window.geometry("700x500")
 label = Label(text = "Welcome to Image to PDF Generator")
 label.place(relx = 0.5, rely=0.1, anchor = CENTER)
@@ -95,10 +103,12 @@ label2.pack()
 button = Button(text = "Open", command = openfile)
 button.place(relx = 0.5, rely=0.3, anchor = CENTER)
 button.pack()
+checkbox = Checkbutton(window, text='OCR Enabled',variable=ocr_checked, onvalue=1, offvalue=0)
+checkbox.place(relx=0.5, rely=0.75, anchor = CENTER)
 button2 = Button(text = "Save", command = saveFile)
-button2.place(relx = 0.5, rely=0.8, anchor = CENTER)
+button2.place(relx = 0.5, rely=0.85, anchor = CENTER)
 infolabel = Label(text = "Waiting...")
-infolabel.place(relx = 0.5, rely= 0.9, anchor = CENTER)
+infolabel.place(relx = 0.5, rely= 0.95, anchor = CENTER)
 
 
 window.mainloop()
