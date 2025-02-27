@@ -35,8 +35,6 @@ def placeImages():
     for b in displayImageButtons:
         b.destroy()
 
-
-    
     imageWidth = 120
     totalWidth = imageWidth * len(displayImages)
     xStart = (window.winfo_width() - totalWidth) /2
